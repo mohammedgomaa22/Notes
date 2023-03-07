@@ -1,0 +1,144 @@
+body {
+    padding: 0;
+    margin: 0;
+    background-color: #0D1117;
+}
+html {
+    scroll-behavior: smooth;
+}
+::-webkit-scrollbar {
+    width: 10px;
+}
+::-webkit-scrollbar-track {
+    background-color: #2d2727;
+}
+::-webkit-scrollbar-thumb {
+    background-color: #ff6347e0;
+}
+/* ------------------------------ */
+.notes {
+    max-width: 600px;
+    margin: 10px auto;
+    padding: 30px 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+}
+.notes h1 {
+    margin: 0;
+    color: rgb(152, 35, 14);
+    text-transform: uppercase;
+    font-weight: bolder;
+    font-size: 36px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif ;
+}
+.notes .add {
+    min-width: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 7px;
+    background-color: rgba(255, 255, 255, 0.120);
+}
+.notes .add input.text {
+    padding: 7px;
+    flex: 1;
+    height: 30px;
+    border-radius: 7px;
+    border: 0;
+    font-size: 18px;
+    outline: none;
+    transition: 0.5s;
+    color: #c5bfbf;
+    background-color: rgba(255, 255, 255, 0.09);
+}
+.notes .add button.add-task {
+    height: 43px;
+    width: 100px;
+    border: 0;
+    border-radius: 7px;
+    font-size: 18px;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: 0.5s;
+    cursor: pointer;
+    color: white;
+    background-color: tomato;
+}
+@media (max-width: 628px) {
+    .notes .add button.add-task {
+        width: 100%;
+    }
+}
+.notes .add button.add-task:hover {
+    opacity: 1;
+}
+.notes .tasks {
+    min-width: 100%;
+    margin: 0;
+    padding: 20px;
+    border-radius: 7px;
+    background-color: rgba(255, 255, 255, 0.120);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.notes .tasks .task {
+    padding: 15px 35px 15px 15px;
+    min-height: 30px;
+    width: 100%;
+    border-radius: 7px;
+    margin: 0px;
+    font-size: 18px;
+    transition: 0.5s;
+    color: #bd9c9c;
+    background-color: rgba(255, 255, 255, 0.09);
+    position: relative;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    transition: 0.5s;
+    cursor: pointer;
+}
+.notes .tasks .done {
+    position: relative;
+    opacity: .3;
+}
+.notes .tasks .done::before {
+    content: "";
+    position: absolute;
+    height: 0.08px;
+    width: 100%;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #bd9c9c;
+    transition: 0.5s;
+}
+.notes .tasks .task p {
+    margin: 0;
+    line-height: 1.6;
+    letter-spacing: 1px;
+}
+.notes .tasks .task i.delete {
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    font-size: 24px;
+    transition: 0.5s;
+    color: #0D1117;
+}
+.notes .tasks .task i:hover {
+    color: rgba(96, 23, 23, 0.976);
+}
+.notes .tasks .task:hover i {
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
