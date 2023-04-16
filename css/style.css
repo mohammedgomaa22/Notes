@@ -123,6 +123,7 @@ html {
     margin: 0;
     line-height: 1.6;
     letter-spacing: 1px;
+    user-select: none;
 }
 .notes .tasks .task i.delete {
     position: absolute;
@@ -142,3 +143,18 @@ html {
     top: 50%;
     transform: translateY(-50%);
 }
+/* .delete-all {
+    color: #c5bfbf;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid white;
+    padding: 5px 10px;
+    border-radius: 6px;
+    margin: auto;
+    transition: 0.3s;
+}
+.delete-all:hover {
+    color: rgb(236, 32, 32);
+    border-color: brown;
+} */

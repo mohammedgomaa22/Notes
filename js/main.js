@@ -1,111 +1,120 @@
-// ------------------------------------------------------------------
+// // ------------------------------------------------------------------
 const note = () => {
-    let inputText = document.querySelector(".notes .add .text"),
-        addBtn = document.querySelector(".notes .add .add-task"),
-        showTasks = document.querySelector(".notes .tasks"),
-        arrTask = [];
-    // ---------------------------------------
-    // Add Task To Array
-    function addTaskToArray(taskText) {
-        let task = {
+    const input = document.querySelector(".add .text"),
+        addBtn = document.querySelector(".add .add-task"),
+        result = document.querySelector(".notes .tasks");
+        let arrTasks = [];
+    // ------------------------
+    // Check Data From Local 
+    if (localStorage.getItem("tasks")) {
+        arrTasks = JSON.parse(localStorage.getItem("tasks"));
+    }
+    // Get Data From localStorage 
+    getDataFromLocal();
+    // ----------
+    // Start Click Events 
+    // With click BTN
+    addBtn.addEventListener("click", () => {
+        if (input.value !== "") {
+            addTaskToArr(input.value);
+            input.value = "";
+            input.focus();
+        }
+    });
+    // With click Key (Enter)
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+            if (input.value !== "") {
+                addTaskToArr(input.value);
+                input.value = "";
+                input.focus();
+            }
+        }
+    });
+    // End Click Events 
+    // ----------
+    // Add class done to tasks and Delete Task
+    result.addEventListener("click", (e) => {
+        // Delete Tasks 
+        if (e.target.classList.contains("delete")) {
+            deleteTaskFromLocal(e.target.parentElement.getAttribute("data-id"));
+            e.target.parentElement.remove();
+        }
+        // Done Tasks 
+        if (e.target.classList.contains("task")) {
+            changeCompletedInLocal(e.target.getAttribute("data-id"));
+            e.target.classList.toggle("done");
+        }
+        if (e.target.classList.contains("text")) {
+            changeCompletedInLocal(e.target.parentElement.getAttribute("data-id"));
+            e.target.parentElement.classList.toggle("done");
+        }
+    });
+    // ------------------------
+    // Add Task To Array 
+    function addTaskToArr(text) {
+        task = {
             id: Date.now(),
-            title: taskText,
-            complated: false,
-        };
-        arrTask.push(task);
-    };
-    // ---------------------------------------
-    // Add Task To Page From Array
-    function addTaskToPageFrom(arrTask) {
-        showTasks.innerHTML = "";
-        arrTask.forEach((task) => {
-            // Create Task
+            title: text,
+            completed: false,
+        }
+        // add tasks to array 
+        arrTasks.push(task);
+        // add Element to Page 
+        addTaskToPageFrom(arrTasks);
+        addTaskToLocalFrom(arrTasks);
+    }
+    // Add Task To Page 
+    function addTaskToPageFrom(taskOfArr) {
+        result.innerHTML = "";
+        // create Elements from array
+        taskOfArr.forEach((task) => {
             let div = document.createElement("div"),
-                text = document.createElement("p"),
-                deleteBtn = document.createElement("i");
-            // Append Attributes
-            div.className = "task";
-            if (task.complated === true) {
-                div.classList.add("done");
+                p = document.createElement("p"),
+                trash = document.createElement("i");
+            // add Attr 
+            div.classList.add("task");
+            if (task.completed) {
+                div.className = "task done";
             }
             div.setAttribute("data-id", task.id);
-            text.textContent = task.title;
-            deleteBtn.className = "delete fa-regular fa-trash-can";
-            // Append Child
-            div.append(text, deleteBtn);
-            showTasks.append(div);
-            // ---------------------------------------
+            p.textContent = task.title;
+            p.classList.add("text");
+            trash.className = "delete fa-regular fa-trash-can";
+            // Append child 
+            div.append(p, trash);
+            result.appendChild(div);
         });
-    };
-    // ---------------------------------------
-    // Add Task To LocalStorage From Array
-    function addTaskToLocalStorageFrom(arrTask) {
-        localStorage.setItem("tasks", JSON.stringify(arrTask));
-    };
-    // ---------------------------------------
-    // Add Click Event To Add Task (Add Task To Page And LocalStorage)
-    addBtn.addEventListener("click", () => {
-        if (inputText.value !== "") {
-            addTaskToArray(inputText.value);
-            addTaskToPageFrom(arrTask);
-            addTaskToLocalStorageFrom(arrTask);    
-        };
-        inputText.value = "";
-        inputText.focus();
-    });
-    // ---------------------------------------
-    inputText.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-            if (inputText.value !== "") {
-                addTaskToArray(inputText.value);
-                addTaskToPageFrom(arrTask);
-                addTaskToLocalStorageFrom(arrTask);    
-            };
-            inputText.value = "";
-            inputText.focus();
+    }
+    // -----------------
+    // Add Task To Local
+    function addTaskToLocalFrom(taskOfArr) {
+        localStorage.setItem("tasks", JSON.stringify(taskOfArr));
+    }
+    // Get data From Local 
+    function getDataFromLocal() {
+        let data = localStorage.getItem("tasks");
+        if (data) {
+            let tasks = JSON.parse(data);
+            addTaskToPageFrom(tasks);
         }
-    });
-    // ---------------------------------------
-    // Add Click Event To Delete And Complated Task (Remove Task From Page And LocalStorage)
-    showTasks.addEventListener("click", (ev) => {
-        if (ev.target.classList.contains("delete")) {
-            deleteTaskWithDataId(ev.target.parentElement.getAttribute("data-id"));
-            ev.target.parentElement.remove();
-        };
-        // Start More Style to Task
-        if (ev.target.classList.contains("task")) {
-            complateTaskWith(ev.target.getAttribute("data-id"));
-            ev.target.classList.toggle("done");
-        };
-        // End More Style to Task            
-    });
-    // ---------------------------------------
-    // Delete Task With data-id From Array And LocalStorage
-    function deleteTaskWithDataId(idTask) {
-        arrTask = arrTask.filter((task) => task.id != idTask);
-        addTaskToLocalStorageFrom(arrTask);
-    };
-    // ---------------------------------------
-    // Save Tasks To Page With LocalStorage
-    function saveTasks() {
-        if (localStorage.getItem("tasks")) {
-            arrTask = JSON.parse(localStorage.getItem("tasks"));
-            addTaskToPageFrom(arrTask);
-        }
-    };
-    saveTasks();    
-    // ---------------------------------------
-    // Complate Task
-    function complateTaskWith(idTask) {
-        for (let i = 0; i < arrTask.length; i++) {
-            if (arrTask[i].id == idTask) {
-                arrTask[i].complated == false
-                ? arrTask[i].complated = true
-                : arrTask[i].complated = false;
+    }
+    // Delete Task From local 
+    function deleteTaskFromLocal(dataId) {
+        arrTasks = arrTasks.filter((task) => task.id != dataId);
+        addTaskToLocalFrom(arrTasks);
+    }
+    // Change Completed Status in local
+    function changeCompletedInLocal(dataId) {
+        for (let i = 0; i < arrTasks.length; i++) {
+            if (arrTasks[i].id == dataId) {
+                arrTasks[i].completed == false 
+                ? (arrTasks[i].completed = true) 
+                : (arrTasks[i].completed = false);
             }
         }
-        addTaskToLocalStorageFrom(arrTask);
-    };
+        addTaskToLocalFrom(arrTasks);
+    }    
 };
 note();
-// ------------------------------------------------------------------
+// // ------------------------------------------------------------------
